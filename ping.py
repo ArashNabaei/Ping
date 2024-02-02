@@ -62,51 +62,39 @@ def send_ping(target_host, count):
         target_ip = target_host
     else:
         try:
-            # Get the IP address of the target host
             target_ip = socket.gethostbyname(target_host)
         except socket.gaierror as e:
             print(f"Error: {e}")
             return
 
-    # Create a raw socket
     icmp_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
 
-    # Set the timeout for receiving packets
     icmp_socket.settimeout(1)
 
     success_count = 0
 
     for seq_num in range(1, count + 1):
-        # Craft the ICMP packet with a unique sequence number
         icmp_packet = create_icmp_packet(seq_num)
 
         try:
-            # Send the packet to the target
             icmp_socket.sendto(icmp_packet, (target_ip, 0))
 
-            # Record the time when the packet was sent
             send_time = time.time()
 
-            # Receive the response
             response, addr = icmp_socket.recvfrom(1024)
 
-            # Calculate round-trip time
-            rtt = (time.time() - send_time) * 1000  # Convert to milliseconds
+            rtt = (time.time() - send_time) * 1000
 
-            # Print the results
             print(f"Ping successful.Reply from {addr}: time={rtt:.2f}ms")
             success_count += 1
 
         except socket.timeout:
             print("\nRequest timed out.")
 
-    # Calculate packet loss percentage
     packet_loss_percentage = ((count - success_count) / count) * 100
 
-    # Print summary
     print(f"\n--- Ping statistics for {target_host} ---")
     print(f"Packets: Sent = {count}, Received = {success_count}, Lost = {count - success_count} ({packet_loss_percentage:.2f}% loss)")
 
-    # Close the socket after all pings
     icmp_socket.close()
 
