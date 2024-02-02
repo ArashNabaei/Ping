@@ -4,7 +4,6 @@ import time
 import sys
 
 def calculate_checksum(data):
-    # Calculate the checksum for the ICMP packet
     checksum = 0
     for i in range(0, len(data), 2):
         checksum += (data[i] << 8) + data[i + 1]
