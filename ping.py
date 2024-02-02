@@ -83,7 +83,8 @@ def send_ping(target_host, count):
 
             response, addr = icmp_socket.recvfrom(1024)
 
-            rtt = (time.time() - send_time) * 1000
+            rtt = (time.time() - send_time) *1000
+
 
             print(f"Ping successful.Reply from {addr}: time={rtt:.2f}ms")
             success_count += 1
