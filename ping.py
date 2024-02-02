@@ -98,3 +98,14 @@ def send_ping(target_host, count):
 
     icmp_socket.close()
 
+
+if len(sys.argv) != 2:
+    print("Usage: python ping.py <target_host>")
+    sys.exit(1)
+
+target_host = sys.argv[1]
+
+count = int(input("Enter the number of requests: "))
+
+send_ping(target_host, count)
+
